@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Result extends Equatable {
-  final String taskId;
+  final String id;
   final List<List<String>> field;
   final List<List<int>> steps;
   final List<int> start;
@@ -9,7 +9,7 @@ class Result extends Equatable {
   final String path;
 
   const Result({
-    required this.taskId,
+    required this.id,
     required this.field,
     required this.steps,
     required this.start,
@@ -18,5 +18,5 @@ class Result extends Equatable {
   });
 
   @override
-  List<Object?> get props => [taskId, field, steps, start, end, path];
+  List<Object?> get props => [id, field, steps, start, end, path];
 }

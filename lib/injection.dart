@@ -6,27 +6,17 @@ import 'package:path_finder_app/data/repositories/path_finder_repository_impl.da
 import 'package:path_finder_app/domain/repositories/path_finder_repository.dart';
 import 'package:path_finder_app/presentation/cubit/path_finder_cubit.dart';
 
-import 'injection.config.dart';
-
 final GetIt getIt = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() => getIt.init();
+Future<void> configureDependencies() async {
+  getIt.registerLazySingleton<Dio>(() => Dio());
+  getIt.registerLazySingleton<PathFinderRemoteDataSource>(() =>
+      PathFinderRemoteDataSourceImpl(baseUrl: 'https://flutter.webspark.dev'));
+  getIt.registerLazySingleton<PathFinderRepository>(
+      () => PathFinderRepositoryImpl(getIt<PathFinderRemoteDataSource>()));
+  getIt.registerFactory<PathFinderCubit>(
+      () => PathFinderCubit(getIt<PathFinderRepository>()));
 
-@module
-abstract class RegisterModule {
-  @lazySingleton
-  Dio get dio => Dio();
-
-  @lazySingleton
-  PathFinderRemoteDataSource get remoteDataSource =>
-      PathFinderRemoteDataSourceImpl(baseUrl: 'https://flutter.webspark.dev');
-
-  @lazySingleton
-  PathFinderRepository get repository =>
-      PathFinderRepositoryImpl(getIt<PathFinderRemoteDataSource>());
-
-  @injectable
-  PathFinderCubit get pathFinderCubit =>
-      PathFinderCubit(getIt<PathFinderRepository>());
+  await getIt.allReady();
 }

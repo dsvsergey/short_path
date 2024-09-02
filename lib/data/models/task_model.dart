@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
+
 import '../../domain/entities/path_task.dart';
+import 'point_model.dart';
 
 class TaskModel extends Equatable {
   final String id;
   final List<List<String>> field;
-  final Map<String, int> start;
-  final Map<String, int> end;
+  final PointModel start;
+  final PointModel end;
 
   const TaskModel({
     required this.id,
@@ -20,8 +22,8 @@ class TaskModel extends Equatable {
       field: List<List<String>>.from(
         json['field'].map((row) => List<String>.from(row)),
       ),
-      start: Map<String, int>.from(json['start']),
-      end: Map<String, int>.from(json['end']),
+      start: PointModel.fromJson(json['start']),
+      end: PointModel.fromJson(json['end']),
     );
   }
 
@@ -31,8 +33,8 @@ class TaskModel extends Equatable {
       field: field
           .map((row) => row.map((cell) => cell == 'X' ? 1 : 0).toList())
           .toList(),
-      start: [start['y']!, start['x']!],
-      end: [end['y']!, end['x']!],
+      start: [start.y, start.x],
+      end: [end.y, end.x],
     );
   }
 

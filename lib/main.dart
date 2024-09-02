@@ -11,7 +11,7 @@ import 'presentation/pages/result_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   runApp(const MyApp());
 }
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PathFinderCubit>(
-          create: (context) => GetIt.I<PathFinderCubit>(),
+          create: (context) => getIt<PathFinderCubit>(),
         ),
       ],
       child: MaterialApp(
