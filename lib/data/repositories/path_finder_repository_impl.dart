@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../core/error/failures.dart';
 import '../../core/error/exceptions.dart';
 import '../../domain/entities/path_task.dart';
-import '../../domain/entities/result.dart';
+import '../../domain/entities/path_result.dart';
 import '../../domain/repositories/path_finder_repository.dart';
 import '../datasources/path_finder_remote_data_source.dart';
 import '../models/api_response.dart';
@@ -38,18 +38,13 @@ class PathFinderRepositoryImpl implements PathFinderRepository {
 
   @override
   Future<Either<Failure, ResultResponseModel>> sendResults(
-      List<Result> results) async {
+      List<PathResult> results) async {
     try {
       final sendResultModels = results
-          .map((result) => SendResultModel(
-                id: result.id,
-                steps: result.steps
-                    .map((step) => StepModel(
-                          x: step[0].toString(),
-                          y: step[1].toString(),
-                        ))
-                    .toList(),
-                path: result.path,
+          .map((pathResult) => SendResultModel(
+                id: pathResult.id,
+                steps: _convertPathToSteps(pathResult.result.path),
+                path: pathResult.result.path,
               ))
           .toList();
 
@@ -62,5 +57,16 @@ class PathFinderRepositoryImpl implements PathFinderRepository {
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
+  }
+
+  List<StepModel> _convertPathToSteps(String path) {
+    final pointPairs = path.split('->');
+    return pointPairs.map((pair) {
+      final coordinates = pair.replaceAll(RegExp(r'[()]'), '').split(',');
+      return StepModel(
+        x: coordinates[0],
+        y: coordinates[1],
+      );
+    }).toList();
   }
 }

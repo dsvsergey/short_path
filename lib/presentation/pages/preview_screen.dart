@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_finder_app/domain/entities/result.dart';
-import 'package:path_finder_app/presentation/cubit/path_finder_cubit.dart';
+import 'package:path_finder_app/domain/entities/path_result.dart';
 import 'package:path_finder_app/presentation/widgets/grid_widget.dart';
 
 class PreviewScreen extends StatelessWidget {
@@ -9,7 +7,20 @@ class PreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Result result = ModalRoute.of(context)!.settings.arguments as Result;
+    final PathResult pathResult =
+        ModalRoute.of(context)!.settings.arguments as PathResult;
+
+    final steps = pathResult.result.steps;
+    final path = pathResult.result.path;
+
+    final startPoint = steps.first;
+    final endPoint = steps.last;
+
+    final fieldSize = steps
+            .map((p) => p.x > p.y ? p.x : p.y)
+            .reduce((a, b) => a > b ? a : b) +
+        1;
+    final field = List.generate(fieldSize, (_) => List.filled(fieldSize, '.'));
 
     return Scaffold(
       appBar: AppBar(
@@ -19,28 +30,24 @@ class PreviewScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: BlocBuilder<PathFinderCubit, PathFinderState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Shortest path: ${result.path}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridWidget(
-                  field: result.field,
-                  path: result.steps,
-                  startPoint: result.start,
-                  endPoint: result.end,
-                ),
-              ),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Shortest path: $path',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          Expanded(
+            child: GridWidget(
+              field: field,
+              path: steps.map((point) => [point.x, point.y]).toList(),
+              startPoint: [startPoint.x, startPoint.y],
+              endPoint: [endPoint.x, endPoint.y],
+            ),
+          ),
+        ],
       ),
     );
   }

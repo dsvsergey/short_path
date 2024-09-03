@@ -19,7 +19,7 @@ class ResultListScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final result = state.results[index];
               return ListTile(
-                title: Text(result.path),
+                title: Text(result.result.path),
                 onTap: () {
                   Navigator.pushNamed(
                     context,
