@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart' as dartz;
-import 'package:path_finder_app/core/error/failures.dart';
-import 'package:path_finder_app/domain/entities/path_task.dart';
-import 'package:path_finder_app/domain/repositories/path_finder_repository.dart';
+
+import '../../core/error/failures.dart';
+import '../entities/path_task.dart';
+import '../repositories/path_finder_repository.dart';
 
 class GetTasksUseCase {
   final PathFinderRepository repository;

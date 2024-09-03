@@ -49,8 +49,10 @@ class ProcessScreen extends StatelessWidget {
                     },
                   )
                 ],
-                if (state.isResultsSent)
+                if (state.isResultsSent) ...[
+                  const Spacer(),
                   const Text('Results sent successfully!'),
+                ],
                 if (state.error != null)
                   Text('Error: ${state.error}',
                       style: const TextStyle(color: Colors.red)),

@@ -1,15 +1,20 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/path_task.dart';
 import '../../domain/entities/result.dart';
 import '../../domain/repositories/path_finder_repository.dart';
+import '../../domain/usecases/find_shortest_path_usecase.dart';
 
 class PathFinderCubit extends Cubit<PathFinderState> {
   final PathFinderRepository _repository;
+  final FindShortestPathUseCase _findShortestPathUseCase;
 
-  PathFinderCubit(this._repository) : super(PathFinderState.initial());
+  PathFinderCubit(this._repository)
+      : _findShortestPathUseCase = GetIt.I<FindShortestPathUseCase>(),
+        super(PathFinderState.initial());
 
   void setApiUrl(String url) {
     emit(state.copyWith(apiUrl: url));
@@ -46,8 +51,8 @@ class PathFinderCubit extends Cubit<PathFinderState> {
     List<Result> results = [];
 
     for (var task in tasks) {
-      final path = findPath(task);
-      final steps = pathToSteps(path);
+      final pathResult = _findShortestPathUseCase.execute(task);
+      final steps = _pathToSteps(pathResult.result.path);
 
       results.add(Result(
         id: task.id,
@@ -55,7 +60,7 @@ class PathFinderCubit extends Cubit<PathFinderState> {
         steps: steps,
         start: [task.start.x, task.start.y],
         end: [task.end.x, task.end.y],
-        path: path,
+        path: pathResult.result.path,
       ));
 
       completedTasks++;
@@ -69,31 +74,13 @@ class PathFinderCubit extends Cubit<PathFinderState> {
     }
   }
 
-  String findPath(PathTask task) {
-    return "";
-  }
-
-  List<List<int>> pathToSteps(String path) {
+  List<List<int>> _pathToSteps(String path) {
     List<List<int>> steps = [];
-    int x = 0, y = 0;
-    steps.add([x, y]);
+    final pointPairs = path.split('->');
 
-    for (var move in path.split('')) {
-      switch (move) {
-        case 'R':
-          x++;
-          break;
-        case 'L':
-          x--;
-          break;
-        case 'U':
-          y--;
-          break;
-        case 'D':
-          y++;
-          break;
-      }
-      steps.add([x, y]);
+    for (var pair in pointPairs) {
+      final coordinates = pair.replaceAll(RegExp(r'[()]'), '').split(',');
+      steps.add([int.parse(coordinates[0]), int.parse(coordinates[1])]);
     }
 
     return steps;
