@@ -14,21 +14,24 @@ class ResultListScreen extends StatelessWidget {
       ),
       body: BlocBuilder<PathFinderCubit, PathFinderState>(
         builder: (context, state) {
-          return ListView.builder(
-            itemCount: state.results.length,
-            itemBuilder: (context, index) {
-              final result = state.results[index];
-              return ListTile(
-                title: Text(result.result.path),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/preview',
-                    arguments: result,
-                  );
-                },
-              );
-            },
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              itemCount: state.results.length,
+              itemBuilder: (context, index) {
+                final result = state.results[index];
+                return ListTile(
+                  title: Text(result.result.path),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/preview',
+                      arguments: result,
+                    );
+                  },
+                );
+              },
+            ),
           );
         },
       ),

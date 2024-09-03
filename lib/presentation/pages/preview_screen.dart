@@ -30,24 +30,27 @@ class PreviewScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Shortest path: $path',
-              style: Theme.of(context).textTheme.titleLarge,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Shortest path: $path',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
-          ),
-          Expanded(
-            child: GridWidget(
-              field: field,
-              path: steps.map((point) => [point.x, point.y]).toList(),
-              startPoint: [startPoint.x, startPoint.y],
-              endPoint: [endPoint.x, endPoint.y],
+            Expanded(
+              child: GridWidget(
+                field: field,
+                path: steps.map((point) => [point.x, point.y]).toList(),
+                startPoint: [startPoint.x, startPoint.y],
+                endPoint: [endPoint.x, endPoint.y],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
