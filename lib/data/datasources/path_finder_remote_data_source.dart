@@ -12,19 +12,17 @@ abstract class PathFinderRemoteDataSource {
 
 class PathFinderRemoteDataSourceImpl implements PathFinderRemoteDataSource {
   final Dio dio;
-  final String baseUrl;
 
-  PathFinderRemoteDataSourceImpl({required this.baseUrl}) : dio = Dio() {
-    Dio dio = Dio(BaseOptions(
-      baseUrl: 'https://flutter.webspark.dev',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
-      validateStatus: (status) {
-        return status! < 500;
-      },
-    ));
-
+  PathFinderRemoteDataSourceImpl({required String baseUrl})
+      : dio = Dio(BaseOptions(
+          baseUrl: baseUrl,
+          connectTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 10),
+          sendTimeout: const Duration(seconds: 10),
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        )) {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         debugPrint('Request: ${options.method} ${options.path}');
@@ -45,8 +43,7 @@ class PathFinderRemoteDataSourceImpl implements PathFinderRemoteDataSource {
   @override
   Future<ApiResponse> getTasks() async {
     try {
-      final response =
-          await dio.get('https://flutter.webspark.dev/flutter/api');
+      final response = await dio.get('/flutter/api');
       if (response.statusCode == 200) {
         return ApiResponse.fromJson(response.data);
       } else {
@@ -77,7 +74,7 @@ class PathFinderRemoteDataSourceImpl implements PathFinderRemoteDataSource {
       List<SendResultModel> results) async {
     try {
       final response = await dio.post(
-        'https://flutter.webspark.dev/flutter/api',
+        '/flutter/api',
         data: results.map((r) => r.toJson()).toList(),
       );
       if (response.statusCode == 200) {
