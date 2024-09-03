@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../domain/entities/point.dart';
+
 class PointModel extends Equatable {
   final int x;
   final int y;
@@ -22,4 +24,16 @@ class PointModel extends Equatable {
 
   @override
   List<Object?> get props => [x, y];
+}
+
+extension PointExtension on Point {
+  PointModel toModel() {
+    return PointModel(x: x, y: y);
+  }
+}
+
+extension PointModelExtension on PointModel {
+  Point toEntity() {
+    return Point(x: x, y: y);
+  }
 }

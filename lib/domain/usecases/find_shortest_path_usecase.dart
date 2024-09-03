@@ -2,19 +2,29 @@ import 'dart:math' show sqrt;
 
 import 'package:injectable/injectable.dart';
 
+import '../entities/path.dart';
+import '../entities/path_result.dart';
 import '../entities/path_task.dart';
+import '../entities/point.dart';
 import '../utils/node.dart';
 import '../utils/priority_queue.dart';
 
 abstract class FindShortestPathUseCase {
-  List<Point> execute(PathTask task);
+  PathResult execute(PathTask task);
 }
 
 @Singleton(as: FindShortestPathUseCase)
 class FindShortestPathUseCaseImpl implements FindShortestPathUseCase {
   @override
-  List<Point> execute(PathTask task) {
-    return _findShortestPath(task.field, task.start, task.end);
+  PathResult execute(PathTask task) {
+    final steps = _findShortestPath(task.field, task.start, task.end);
+    final pathString = _createPathString(steps);
+    final path = Path(steps: steps, path: pathString);
+    return PathResult(id: task.id, result: path);
+  }
+
+  String _createPathString(List<Point> steps) {
+    return steps.map((point) => '(${point.x},${point.y})').join('->');
   }
 
   List<Point> _findShortestPath(List<String> field, Point start, Point end) {

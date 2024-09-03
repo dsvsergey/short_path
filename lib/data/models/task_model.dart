@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/path_task.dart';
+import '../../domain/entities/point.dart';
 import 'point_model.dart';
 
 class TaskModel extends Equatable {

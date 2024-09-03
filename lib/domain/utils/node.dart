@@ -1,4 +1,4 @@
-import '../entities/path_task.dart';
+import '../entities/point.dart';
 
 class Node {
   final Point point;

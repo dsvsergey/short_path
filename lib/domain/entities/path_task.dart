@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'point.dart';
+
 class PathTask extends Equatable {
   final String id;
   final List<String> field;
@@ -15,14 +17,4 @@ class PathTask extends Equatable {
 
   @override
   List<Object?> get props => [id, field, start, end];
-}
-
-class Point extends Equatable {
-  final int x;
-  final int y;
-
-  const Point({required this.x, required this.y});
-
-  @override
-  List<Object?> get props => [x, y];
 }
