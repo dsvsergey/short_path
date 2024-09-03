@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder_app/domain/entities/path_result.dart';
-import 'package:path_finder_app/presentation/widgets/grid_widget.dart';
+
+import '../../domain/entities/path_result.dart';
+import '../widgets/grid_widget.dart';
 
 class PreviewScreen extends StatelessWidget {
   const PreviewScreen({super.key});
