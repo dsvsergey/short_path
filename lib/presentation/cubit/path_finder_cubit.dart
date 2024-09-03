@@ -51,9 +51,7 @@ class PathFinderCubit extends Cubit<PathFinderState> {
 
       results.add(Result(
         id: task.id,
-        field: task.field
-            .map((row) => row.split(''))
-            .toList(), // Перетворюємо рядок на список символів
+        field: task.field.map((row) => row.split('')).toList(),
         steps: steps,
         start: [task.start.x, task.start.y],
         end: [task.end.x, task.end.y],
@@ -72,9 +70,6 @@ class PathFinderCubit extends Cubit<PathFinderState> {
   }
 
   String findPath(PathTask task) {
-    // Тут має бути ваш алгоритм пошуку шляху
-    // Повертаємо рядок, що представляє шлях, наприклад: "RDLUR"
-    // R - вправо, L - вліво, U - вгору, D - вниз
     return "";
   }
 
