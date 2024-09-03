@@ -39,8 +39,69 @@ class PathFinderCubit extends Cubit<PathFinderState> {
   }
 
   void _startCalculations() {
-    // Implement the path finding algorithm here
-    // Update progress and results as you go
+    final tasks = state.tasks;
+    if (tasks.isEmpty) return;
+
+    int completedTasks = 0;
+    List<Result> results = [];
+
+    for (var task in tasks) {
+      final path = findPath(task);
+      final steps = pathToSteps(path);
+
+      results.add(Result(
+        id: task.id,
+        field: task.field
+            .map((row) => row.split(''))
+            .toList(), // Перетворюємо рядок на список символів
+        steps: steps,
+        start: [task.start.x, task.start.y],
+        end: [task.end.x, task.end.y],
+        path: path,
+      ));
+
+      completedTasks++;
+
+      final progress = completedTasks / tasks.length;
+      emit(state.copyWith(
+        results: results,
+        progress: progress,
+        isCalculationFinished: completedTasks == tasks.length,
+      ));
+    }
+  }
+
+  String findPath(PathTask task) {
+    // Тут має бути ваш алгоритм пошуку шляху
+    // Повертаємо рядок, що представляє шлях, наприклад: "RDLUR"
+    // R - вправо, L - вліво, U - вгору, D - вниз
+    return "";
+  }
+
+  List<List<int>> pathToSteps(String path) {
+    List<List<int>> steps = [];
+    int x = 0, y = 0;
+    steps.add([x, y]);
+
+    for (var move in path.split('')) {
+      switch (move) {
+        case 'R':
+          x++;
+          break;
+        case 'L':
+          x--;
+          break;
+        case 'U':
+          y--;
+          break;
+        case 'D':
+          y++;
+          break;
+      }
+      steps.add([x, y]);
+    }
+
+    return steps;
   }
 
   void sendResultsToServer() async {

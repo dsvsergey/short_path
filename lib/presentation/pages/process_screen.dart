@@ -18,24 +18,42 @@ class ProcessScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Spacer(),
                 Text(
                   state.isCalculationFinished
-                      ? 'All calculations has finished, you can send your results to server'
+                      ? 'All calculations have finished, you can send your results to server'
                       : 'Calculating...',
+                  textAlign: TextAlign.center,
+                  maxLines: null,
+                  softWrap: true,
                 ),
                 const SizedBox(height: 16),
-                CircularProgressIndicator(
-                  value: state.progress,
-                ),
                 Text('${(state.progress * 100).toStringAsFixed(0)}%'),
                 const SizedBox(height: 16),
-                if (state.isCalculationFinished)
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    value: state.progress,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                    'Tasks completed: ${state.results.length}/${state.tasks.length}'),
+                if (state.isCalculationFinished && !state.isResultsSent) ...[
+                  const Spacer(),
                   ElevatedButton(
                     child: const Text('Send results to server'),
                     onPressed: () {
                       context.read<PathFinderCubit>().sendResultsToServer();
                     },
-                  ),
+                  )
+                ],
+                if (state.isResultsSent)
+                  const Text('Results sent successfully!'),
+                if (state.error != null)
+                  Text('Error: ${state.error}',
+                      style: const TextStyle(color: Colors.red)),
               ],
             ),
           );

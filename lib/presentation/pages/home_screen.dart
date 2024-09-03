@@ -30,7 +30,8 @@ class HomeScreen extends StatelessWidget {
                   prefixIcon: Icon(Icons.link),
                 ),
               ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
+              const Spacer(),
               ElevatedButton(
                 child: const Text('Start counting process'),
                 onPressed: () {
